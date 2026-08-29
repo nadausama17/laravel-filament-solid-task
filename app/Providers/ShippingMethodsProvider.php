@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Shipping\FlatRateShippingMethod;
+use App\Shipping\PickupShippingMethod;
 use App\Shipping\ShippingMethodsRegistry;
 use App\Shipping\WeightBasedShippingMethod;
 use App\Shipping\ZoneBasedShippingMethod;
@@ -21,6 +22,7 @@ class ShippingMethodsProvider extends ServiceProvider
             $registry->register('flat', new FlatRateShippingMethod());
             $registry->register('weight', new WeightBasedShippingMethod());
             $registry->register('zone', new ZoneBasedShippingMethod());
+            $registry->register('pickup', new PickupShippingMethod());
 
             return $registry;
         });
