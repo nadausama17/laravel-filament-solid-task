@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,5 +31,12 @@ class Order extends Model
             'shipping_cost_minor' => 'integer',
             'status' => OrderStatus::class,
         ];
+    }
+
+    protected function orderTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => "Order #{$this->id}",
+        );
     }
 }

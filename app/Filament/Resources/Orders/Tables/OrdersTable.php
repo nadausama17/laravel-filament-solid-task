@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Orders\Tables;
 
 use App\Enums\OrderStatus;
 use App\Models\Order;
+use App\Services\OrderStatusTransitionService;
 use App\Services\ShippingRecalculationService;
 use App\Shipping\ShippingMethodsRegistry;
 use Filament\Actions\Action;
@@ -62,6 +63,12 @@ class OrdersTable
                             ->body("New shipping cost: {$cost}")
                             ->success()
                             ->send();
+                    }),
+                Action::make('markAsShipped')
+                    ->label('Mark as shipped')
+                    ->visible(fn(Order $order) => $order->status === OrderStatus::Paid)
+                    ->action(function (Order $order, OrderStatusTransitionService $transition) {
+                        $transition->markAsShipped($order);
                     })
             ])
             ->toolbarActions([
