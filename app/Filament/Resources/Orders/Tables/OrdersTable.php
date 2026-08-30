@@ -4,11 +4,13 @@ namespace App\Filament\Resources\Orders\Tables;
 
 use App\Enums\OrderStatus;
 use App\Models\Order;
+use App\Services\ShippingRecalculationService;
 use App\Shipping\ShippingMethodsRegistry;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -32,6 +34,9 @@ class OrdersTable
                 TextColumn::make('shipping_cost_minor')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('shipping_method')
+                    ->formatStateUsing(fn(string $state, ShippingMethodsRegistry $registry) => $registry->get($state)->label())
+                    ->searchable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn(OrderStatus $state) => $state->color())
@@ -48,7 +53,16 @@ class OrdersTable
             ->recordActions([
                 EditAction::make(),
                 Action::make('recalculateShipping')
-                ->label('Recalculate shipping')
+                    ->label('Recalculate shipping')
+                    ->action(function (Order $order, ShippingRecalculationService $service) {
+                        $cost = $service->recalculate($order);
+
+                        Notification::make()
+                            ->title('Shipping Recalculated')
+                            ->body("New shipping cost: {$cost}")
+                            ->success()
+                            ->send();
+                    })
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
