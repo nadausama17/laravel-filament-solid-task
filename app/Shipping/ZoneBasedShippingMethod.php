@@ -20,4 +20,10 @@ class ZoneBasedShippingMethod implements ShippingMethodInterface
     {
         return self::COUNTRY_MAP[$context->country] ?? self::DEFAULT_COUNTRY_RATE;
     }
+
+    #[Override]
+    public function label(): string
+    {
+        return 'Zone Based';
+    }
 }

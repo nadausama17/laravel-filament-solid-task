@@ -12,4 +12,10 @@ class PickupShippingMethod implements ShippingMethodInterface
     {
         return 0;
     }
+
+    #[Override]
+    public function label(): string
+    {
+        return 'Store Pickup';
+    }
 }

@@ -14,4 +14,10 @@ class FlatRateShippingMethod implements ShippingMethodInterface
     {
         return self::RATE;
     }
+
+    #[Override]
+    public function label(): string
+    {
+        return 'Flat Rate';
+    }
 }

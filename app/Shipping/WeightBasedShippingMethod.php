@@ -19,4 +19,10 @@ class WeightBasedShippingMethod implements ShippingMethodInterface
 
         return self::BASE + ($extraKG * self::EXTRA_KG_COST);
     }
+
+    #[Override]
+    public function label(): string
+    {
+        return 'Weight Based';
+    }
 }

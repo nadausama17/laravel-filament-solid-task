@@ -18,4 +18,14 @@ enum OrderStatus: string
             self::Cancelled => 'Cancelled',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Paid => 'success',
+            self::Shipped => 'info',
+            self::Cancelled => 'danger'
+        };
+    }
 }

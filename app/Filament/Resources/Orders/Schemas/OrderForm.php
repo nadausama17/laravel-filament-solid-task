@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Orders\Schemas;
 
 use App\Enums\OrderStatus;
+use App\Shipping\ShippingMethodsRegistry;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -25,8 +26,10 @@ class OrderForm
                 TextInput::make('subtotal_minor')
                     ->required()
                     ->numeric(),
-                TextInput::make('shipping_method')
-                    ->required(),
+                Select::make('shipping_method')
+                    ->options(fn(ShippingMethodsRegistry $registry) => collect($registry->keys())
+                        ->mapWithKeys(fn(string $key) => [$key => $registry->get($key)->label()])
+                        ->toArray())->required(),
                 TextInput::make('shipping_cost_minor')
                     ->numeric(),
                 Select::make('status')

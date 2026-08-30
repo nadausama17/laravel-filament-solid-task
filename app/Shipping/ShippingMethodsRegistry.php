@@ -22,4 +22,9 @@ class ShippingMethodsRegistry
 
         return $this->methods[$key];
     }
+
+    public function keys(): array
+    {
+        return array_keys($this->methods);
+    }
 }
